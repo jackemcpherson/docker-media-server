@@ -8,7 +8,7 @@ services:
       - ${PLEX_CONFIG_DIR}:/config
       - ${MEDIA_DIR}:/media
     ports:
-      - 32400:32400
+      - ${PLEX_PORT}:32400
     restart: unless-stopped
     environment:
       - PUID=1000
@@ -20,6 +20,8 @@ services:
       - ${RADARR_CONFIG_DIR}:/config
       - ${MOVIES_DIR}:/movies
       - ${DOWNLOADS_DIR_COMPLETE}:/downloads
+    ports:
+      - ${RADARR_PORT}:7878
     environment:
       - PUID=1000
       - PGID=1000
@@ -31,6 +33,8 @@ services:
       - ${SONARR_CONFIG_DIR}:/config
       - ${TV_DIR}:/tv
       - ${DOWNLOADS_DIR_COMPLETE}:/downloads
+    ports:
+      - ${SONARR_PORT}:8989
     environment:
       - PUID=1000
       - PGID=1000
@@ -41,6 +45,8 @@ services:
     volumes:
       - ${TRANSMISSION_CONFIG_DIR}:/config
       - ${DOWNLOADS_DIR_INCOMPLETE}:/downloads
+    ports:
+      - ${TRANSMISSION_PORT}:9091
     environment:
       - PUID=1000
       - PGID=1000
@@ -51,6 +57,8 @@ services:
     volumes:
       - ${SABNZBD_CONFIG_DIR}:/config
       - ${DOWNLOADS_DIR_INCOMPLETE}:/downloads
+    ports:
+      - ${SABNZBD_PORT}:8080
     environment:
       - PUID=1000
       - PGID=1000
@@ -61,7 +69,25 @@ services:
     volumes:
       - ${JACKETT_CONFIG_DIR}:/config
       - ${DOWNLOADS_DIR_COMPLETE}:/downloads
+    ports:
+      - ${JACKETT_PORT}:9117
     environment:
       - PUID=1000
       - PGID=1000
     restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce
+    volumes:
+      - ${PORTAINER_CONFIG_DIR}:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - ${PORTAINER_PORT}:9000
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    command: --interval 300
