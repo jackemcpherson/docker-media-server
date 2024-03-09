@@ -1,0 +1,62 @@
+version: '3'
+services:
+  plex:
+    image: plexinc/pms-docker
+    volumes:
+      - /path/to/plex/config:/config
+      - /path/to/media:/media
+    ports:
+      - 32400:32400
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    volumes:
+      - /path/to/radarr/config:/config
+      - /path/to/movies:/movies
+      - /path/to/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    volumes:
+      - /path/to/sonarr/config:/config
+      - /path/to/tv:/tv
+      - /path/to/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
+
+  transmission:
+    image: linuxserver/transmission
+    volumes:
+      - /path/to/transmission/config:/config
+      - /path/to/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
+
+  sabnzbd:
+    image: linuxserver/sabnzbd
+    volumes:
+      - /path/to/sabnzbd/config:/config
+      - /path/to/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
+
+  jackett:
+    image: linuxserver/jackett
+    volumes:
+      - /path/to/jackett/config:/config
+      - /path/to/downloads:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
