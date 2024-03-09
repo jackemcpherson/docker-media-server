@@ -3,16 +3,20 @@ version: '3'
 services:
 
   plex:
-    image: linuxserver/plex
-    volumes:
-      - ${PLEX_CONFIG_DIR}:/config
-      - ${MEDIA_DIR}:/media
-    ports:
-      - ${PLEX_PORT}:32400
-    restart: unless-stopped
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
     environment:
       - PUID=1000
       - PGID=1000
+      - TZ=Australia/Melbourne
+      - VERSION=docker
+    volumes:
+      - ${PLEX_CONFIG_DIR}:/config
+      - ${MEDIA_DIR}/TV:/tv
+      - ${MEDIA_DIR}/Movies:/movies
+    ports:
+      - ${PLEX_PORT}:32400
+    restart: unless-stopped
 
   radarr:
     image: linuxserver/radarr
