@@ -1,20 +1,25 @@
 version: '3'
+
 services:
+
   plex:
-    image: plexinc/pms-docker
+    image: linuxserver/plex
     volumes:
-      - /path/to/plex/config:/config
-      - /path/to/media:/media
+      - ${PLEX_CONFIG_DIR}:/config
+      - ${MEDIA_DIR}:/media
     ports:
       - 32400:32400
     restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
 
   radarr:
     image: linuxserver/radarr
     volumes:
-      - /path/to/radarr/config:/config
-      - /path/to/movies:/movies
-      - /path/to/downloads:/downloads
+      - ${RADARR_CONFIG_DIR}:/config
+      - ${MOVIES_DIR}:/movies
+      - ${DOWNLOADS_DIR_COMPLETE}:/downloads
     environment:
       - PUID=1000
       - PGID=1000
@@ -23,9 +28,9 @@ services:
   sonarr:
     image: linuxserver/sonarr
     volumes:
-      - /path/to/sonarr/config:/config
-      - /path/to/tv:/tv
-      - /path/to/downloads:/downloads
+      - ${SONARR_CONFIG_DIR}:/config
+      - ${TV_DIR}:/tv
+      - ${DOWNLOADS_DIR_COMPLETE}:/downloads
     environment:
       - PUID=1000
       - PGID=1000
@@ -34,8 +39,8 @@ services:
   transmission:
     image: linuxserver/transmission
     volumes:
-      - /path/to/transmission/config:/config
-      - /path/to/downloads:/downloads
+      - ${TRANSMISSION_CONFIG_DIR}:/config
+      - ${DOWNLOADS_DIR_INCOMPLETE}:/downloads
     environment:
       - PUID=1000
       - PGID=1000
@@ -44,8 +49,8 @@ services:
   sabnzbd:
     image: linuxserver/sabnzbd
     volumes:
-      - /path/to/sabnzbd/config:/config
-      - /path/to/downloads:/downloads
+      - ${SABNZBD_CONFIG_DIR}:/config
+      - ${DOWNLOADS_DIR_INCOMPLETE}:/downloads
     environment:
       - PUID=1000
       - PGID=1000
@@ -54,8 +59,8 @@ services:
   jackett:
     image: linuxserver/jackett
     volumes:
-      - /path/to/jackett/config:/config
-      - /path/to/downloads:/downloads
+      - ${JACKETT_CONFIG_DIR}:/config
+      - ${DOWNLOADS_DIR_COMPLETE}:/downloads
     environment:
       - PUID=1000
       - PGID=1000
